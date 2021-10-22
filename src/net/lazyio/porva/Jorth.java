@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,17 +20,27 @@ public class Jorth {
     private static String resetColor = "\033[0m";
 
     public static void main(String[] args) throws IOException {
+        boolean verbose = args.length > 1 && args[1].equals("-v");
         var start = Instant.now();
         if (args[0].equals("--alltests")) {
             Files.list(Paths.get("test/")).forEach(path -> {
                 try {
                     System.out.printf(testDivColor + "==> Running test: %s <==%s\n", path.getFileName(), resetColor);
                     List<String> porthLines = Files.readAllLines(path);
-                    Porth.sim(porthLines, false, true);
+                    Porth.sim(porthLines, verbose, true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
+        } else {
+            try {
+                var filePath = Paths.get(args[0]);
+                System.out.printf(testDivColor + "==> Running test: %s <==%s\n", filePath.getFileName(), resetColor);
+                List<String> porthLines = Files.readAllLines(filePath);
+                Porth.sim(porthLines, verbose, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         var end = Instant.now();
         var duration = Duration.between(start, end);

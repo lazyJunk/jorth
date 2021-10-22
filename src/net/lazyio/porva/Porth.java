@@ -40,6 +40,8 @@ public class Porth {
         GREATER(">"),
         LESS_EQUAL("<="),
         GREATER_EQUAL(">="),
+        DUP("dup"),
+        DROP("drop"),
         ;
 
         public String name;
@@ -96,65 +98,90 @@ public class Porth {
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.PLUS) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => Adding %d to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a + popPair.b);
+                    if (verbose)
+                        log("      => Adding %d to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a + popPair.b);
                     stack.put(index, String.valueOf(popPair.a + popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.MINUS) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => Subtracting %d to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a - popPair.b);
+                    if (verbose)
+                        log("      => Subtracting %d to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a - popPair.b);
                     stack.put(index, String.valueOf(popPair.a - popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.DIV) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => Dividing %d to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a / popPair.b);
+                    if (verbose)
+                        log("      => Dividing %d to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a / popPair.b);
                     stack.put(index, String.valueOf(popPair.a / popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.MUL) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => Multiplying %d to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a * popPair.b);
-                    stack.put(index, String.valueOf(popPair.a * popPair.b));;
+                    if (verbose)
+                        log("      => Multiplying %d to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a * popPair.b);
+                    stack.put(index, String.valueOf(popPair.a * popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.MOD) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => Mod %d to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a % popPair.b);
+                    if (verbose)
+                        log("      => Mod %d to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a % popPair.b);
                     stack.put(index, String.valueOf(popPair.a % popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.EQUAL) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => %d equal %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a == popPair.b);
+                    if (verbose)
+                        log("      => %d equal %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a == popPair.b);
                     stack.put(index, String.valueOf(popPair.a == popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.NOT_EQUAL) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => %d doesn't equal %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a != popPair.b);
+                    if (verbose)
+                        log("      => %d doesn't equal %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a != popPair.b);
                     stack.put(index, String.valueOf(popPair.a != popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.LESS) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => %d is less than %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a < popPair.b);
+                    if (verbose)
+                        log("      => %d is less than %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a < popPair.b);
                     stack.put(index, String.valueOf(popPair.a < popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.GREATER) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => %d is greater than %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a > popPair.b);
+                    if (verbose)
+                        log("      => %d is greater than %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a > popPair.b);
                     stack.put(index, String.valueOf(popPair.a > popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.LESS_EQUAL) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => %d is less or equal to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a <= popPair.b);
+                    if (verbose)
+                        log("      => %d is less or equal to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a <= popPair.b);
                     stack.put(index, String.valueOf(popPair.a <= popPair.b));
                     index++;
                 } else if (Intrinsics.from(token.text) == Intrinsics.GREATER_EQUAL) {
                     var popPair = popPairFromStack(stack, index);
-                    if (verbose) log("      => %d is greater or equal to %d with index[%d && %d]. Result %d\n", popPair.a, popPair.b, index -2, index - 1, popPair.a >= popPair.b);
+                    if (verbose)
+                        log("      => %d is greater or equal to %d with index[%d && %d] to index %d. Result %d\n", popPair.a, popPair.b, index - 2, index - 1, index, popPair.a >= popPair.b);
                     stack.put(index, String.valueOf(popPair.a >= popPair.b));
                     index++;
+                } else if (Intrinsics.from(token.text) == Intrinsics.DUP) {
+                    var pop = pop(stack, index);
+                    if (pop == null) fatal("==> ERROR: [%s] can't be duped.\n", tokens.get(index - 1).text);
+                    if (verbose) log("    => Removed %s from stack with index %d.\n", pop, index - 1);
+                    stack.put(index - 1, pop);
+                    stack.put(index, pop);
+                    if (verbose) log("    => Dup %s from stack to index %d && %d.\n", pop, index - 1, index);
+                    index++;
+                } else if (Intrinsics.from(token.text) == Intrinsics.DROP) {
+                    var pop = pop(stack, index);
+                    tokens.remove(index);
+                    tokens.remove(index - 1);
+                    if (verbose) log("    => Drop %s from stack with index %d.\n", pop, index - 1);
+                    index--;
                 }
             } else {
                 index++;
             }
         }
-        if(verbose) log("Stack: %s\n", stack);
+        if (verbose) log("Stack: %s\n", stack);
         Instant end = Instant.now();
         var duration = Duration.between(start, end);
         log("Took: %sm:%ss:%sms\n", duration.toMinutes(), duration.toSeconds(), duration.toMillis());
@@ -162,6 +189,12 @@ public class Porth {
 
     private static IntPair popPairFromStack(Map<Integer, String> stack, int index) {
         return new IntPair(_int(stack.get(index - 2)), _int(stack.get(index - 1)));
+    }
+
+    private static String pop(Map<Integer, String> stack, int index) {
+        var pop = stack.get(index - 1);
+        stack.remove(index - 1);
+        return pop;
     }
 
     public static List<Token> scriptToOps(List<String> script) {
@@ -180,7 +213,12 @@ public class Porth {
         return tokens;
     }
 
-    private static void log(String msg, Object... args){
+    private static void log(String msg, Object... args) {
         System.out.printf(msg, args);
+    }
+
+    private static void fatal(String msg, Object... args) {
+        System.err.printf(msg, args);
+        System.exit(-1);
     }
 }
