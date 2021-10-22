@@ -1,10 +1,10 @@
-package net.lazyio.porva;
+package net.lazyio.jorth;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
-import static net.lazyio.porva.StringUtils.*;
+import static net.lazyio.jorth.StringUtils.*;
 
 public class Porth {
 
