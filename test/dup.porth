@@ -1,2 +1,2 @@
-"Dup stack top value: a -> a a" print
-34 35 + dup print "Dup String" dup print
+"> Dup stack top value: a -> a a" print
+34 35 + dup print "This is a duped String" dup print

@@ -1,0 +1,4 @@
+"> Can't print anything." print
+1 1 + 2 != if "1 + 1 = 2" print end
+"> Should print: 21 - 1 = 20" print
+21 1 - 20 = if "21 - 1 = 20" print end

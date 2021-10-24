@@ -1,33 +1,33 @@
-"Equals: 69 420" print
+"> Equals: 69 420" print
 69 420 = print
-"Equals: 69 69" print
+"> Equals: 69 69" print
 69 69 = print
 
-"Greater 420 69" print
+"> Greater 420 69" print
 420 69 > print
-"Greater 69 420" print
+"> Greater 69 420" print
 69 420 > print
 
-"Less 420 69" print
+"> Less 420 69" print
 420 69 < print
-"Less 69 420" print
+"> Less 69 420" print
 69 420 < print
 
-"Greater Equals 420 69" print
+"> Greater Equals 420 69" print
 420 69 >= print
-"Greater Equals 69 420" print
+"> Greater Equals 69 420" print
 69 420 >= print
-"Greater Equals 69 69" print
+"> Greater Equals 69 69" print
 69 69 >= print
 
-"Less Equals 420 69" print
+"> Less Equals 420 69" print
 420 69 <= print
-"Less Equals 69 420" print
+"> Less Equals 69 420" print
 69 420 <= print
-"Less Equals 69 69" print
+"> Less Equals 69 69" print
 69 69 <= print
 
-"Not Equals: 69 420" print
+"> Not Equals: 69 420" print
 69 420 != print
-"Not Equals: 69 69" print
+"> Not Equals: 69 69" print
 69 69 != print

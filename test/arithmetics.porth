@@ -1,14 +1,14 @@
-"Addition: 34 + 35" print
+"> Addition: 34 + 35" print
 34 35 + print
 
-"Subtraction: 169 - 100" print
+"> Subtraction: 169 - 100" print
 169 100 - print
 
-"Division: 69000 / 1000" print
+"> Division: 69000 / 1000" print
 69000 1000 / print
 
-"Modulo: 69 mod 100" print
+"> Modulo: 69 mod 100" print
 69 100 mod print
 
-"Multiplication: 69 * 1" print
+"> Multiplication: 69 * 1" print
 69 1 * print
