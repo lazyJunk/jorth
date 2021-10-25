@@ -9,7 +9,7 @@ import static net.lazyio.jorth.util.StringUtils._int;
 
 public class ArithmeticWords {
 
-    public static final IWordParser PLUS = (tokens, currentIndex, blocks, stack, stackIndex, verbose) -> {
+    public static final IWordParser PLUS = (tokens, currentIndex, stack, stackIndex, verbose) -> {
         var popPair = popPairFromStack(stack, stackIndex);
         if (verbose) {
             log("      => Adding %d to %d with index[%d && %d] to index %d. Result %s\n", popPair.a, popPair.b, stackIndex - 2, stackIndex - 1, stackIndex, popPair.a + popPair.b);
@@ -18,7 +18,7 @@ public class ArithmeticWords {
         return new IntPair(currentIndex, stackIndex + 1);
     };
 
-    public static final IWordParser MINUS = (tokens, currentIndex, blocks, stack, stackIndex, verbose) -> {
+    public static final IWordParser MINUS = (tokens, currentIndex, stack, stackIndex, verbose) -> {
         var popPair = popPairFromStack(stack, stackIndex);
         if (verbose) {
             log("      => Subtracting %d to %d with index[%d && %d] to index %d. Result %s\n", popPair.a, popPair.b, stackIndex - 2, stackIndex - 1, stackIndex, popPair.a - popPair.b);
@@ -27,7 +27,7 @@ public class ArithmeticWords {
         return new IntPair(currentIndex, stackIndex + 1);
     };
 
-    public static final IWordParser DIV = (tokens, currentIndex, blocks, stack, stackIndex, verbose) -> {
+    public static final IWordParser DIV = (tokens, currentIndex, stack, stackIndex, verbose) -> {
         var popPair = popPairFromStack(stack, stackIndex);
         if (verbose) {
             log("      => Dividing %d to %d with index[%d && %d] to index %d. Result %s\n", popPair.a, popPair.b, stackIndex - 2, stackIndex - 1, stackIndex, popPair.a / popPair.b);
@@ -36,7 +36,7 @@ public class ArithmeticWords {
         return new IntPair(currentIndex, stackIndex + 1);
     };
 
-    public static final IWordParser TIMES = (tokens, currentIndex, blocks, stack, stackIndex, verbose) -> {
+    public static final IWordParser TIMES = (tokens, currentIndex, stack, stackIndex, verbose) -> {
         var popPair = popPairFromStack(stack, stackIndex);
         if (verbose) {
             log("      => Multiplying %d to %d with index[%d && %d] to index %d. Result %s\n", popPair.a, popPair.b, stackIndex - 2, stackIndex - 1, stackIndex, popPair.a * popPair.b);
@@ -45,7 +45,7 @@ public class ArithmeticWords {
         return new IntPair(currentIndex, stackIndex + 1);
     };
 
-    public static final IWordParser MOD = (tokens, currentIndex, blocks, stack, stackIndex, verbose) -> {
+    public static final IWordParser MOD = (tokens, currentIndex, stack, stackIndex, verbose) -> {
         var popPair = popPairFromStack(stack, stackIndex);
         if (verbose) {
             log("      => Mod %d to %d with index[%d && %d] to index %d. Result %s\n", popPair.a, popPair.b, stackIndex - 2, stackIndex - 1, stackIndex, popPair.a % popPair.b);

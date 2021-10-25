@@ -1,6 +1,5 @@
 package net.lazyio.jorth;
 
-import net.lazyio.jorth.util.IntPair;
 import net.lazyio.jorth.words.WordParser;
 
 import java.time.Duration;
@@ -9,13 +8,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static net.lazyio.jorth.StringUtils.*;
+import static net.lazyio.jorth.util.StringUtils.*;
 
 public class Porth {
 
     public enum DataType {WORD, STR, INT, CHAR, BOOL;}
 
-    public record Token(DataType type, String text) {
+    public static class Token {
+        public DataType type;
+        public String text;
+        public HashMap<String, Integer> tokenLocs = new HashMap<>();
+
+        public Token(DataType type, String text) {
+            this.type = type;
+            this.text = text;
+        }
     }
 
     public static void sim(List<String> script, boolean verbose, boolean print) {
@@ -24,7 +31,7 @@ public class Porth {
         // FIXME: 23/10/2021 ImmutableList pls
         var tokens = scriptToOps(script);
 
-        var blocks = setupBlocks(tokens);
+        setupBlocks(tokens);
 
         int stackIndex = 0;
         var stack = new HashMap<Integer, String>();
@@ -41,7 +48,7 @@ public class Porth {
                 stack.put(stackIndex, token.text);
                 stackIndex++;
             } else if (WordParser.containsWord(token.text)) {
-                var result = WordParser.forWord(token.text).parse(tokens, index, blocks, stack, stackIndex, verbose);
+                var result = WordParser.forWord(token.text).parse(tokens, index, stack, stackIndex, verbose);
                 index = result.a;
                 stackIndex = result.b;
             } else {
@@ -52,30 +59,37 @@ public class Porth {
         if (verbose) log("Stack: %s\n", stack);
         Instant end = Instant.now();
         var duration = Duration.between(start, end);
-        log("Took: %sm:%ss:%sms\n", duration.toMinutes(), duration.toSeconds(), duration.toMillis());
+        log("==> Took: %sm:%ss:%sms\n", duration.toMinutes(), duration.toSeconds(), duration.toMillis());
     }
 
-    private static List<IntPair> setupBlocks(List<Token> tokens) {
-        var blocks = new ArrayList<IntPair>();
+    private static void setupBlocks(List<Token> tokens) {
 
-        int lastEnd = -1;
-        int lastIf = -1;
+        Token lastIf = null;
+        Token lastElse = null;
 
         for (int i = 0; i < tokens.size(); i++) {
-            if (tokens.get(i).text.equals("if")) {
-                if (lastEnd == -1) lastIf = i;
-            } else if (tokens.get(i).text.equals("end")) {
-                if (lastIf != -1) {
-                    blocks.add(new IntPair(lastIf, i));
-                    lastIf = -1;
-                    lastEnd = -1;
-                } else fatal("==> ERROR: [end] can only be used to close blocks.\n");
+            var currToken = tokens.get(i).text;
+            if (currToken.equals(WordParser.IF)) {
+                if (lastIf == null) {
+                    lastIf = tokens.get(i);
+                } else if (lastIf.tokenLocs.containsKey(WordParser.END)) {
+                    lastIf = tokens.get(i);
+                } else fatal("==> ERROR: unclosed [if] blocks. [0]");
+            } else if (currToken.equals(WordParser.ELSE)) {
+                if (lastIf != null) {
+                    lastIf.tokenLocs.put(WordParser.ELSE, i);
+                    lastElse = tokens.get(i);
+                } else fatal("==> ERROR: [else] keyword can't be used without an [if]");
+            } else if (currToken.equals(WordParser.END)) {
+                if (lastIf != null) {
+                    lastIf.tokenLocs.put(WordParser.END, i);
+                    if (lastElse != null) lastElse.tokenLocs.put(WordParser.END, i);
+                } else fatal("==> ERROR: [end] keyword can't be used without an [if]");
             }
         }
 
-        //if (lastEnd != 1 && lastIf == -1) fatal("==> ERROR: [end] can only be used to close blocks.\n");
-
-        return blocks;
+        if (lastIf != null && !lastIf.tokenLocs.containsKey(WordParser.END))
+            fatal("==> ERROR: unclosed [if] blocks. [1]");
     }
 
 
@@ -98,7 +112,7 @@ public class Porth {
         System.out.printf(msg, args);
     }
 
-    private static void fatal(String msg, Object... args) {
+    public static void fatal(String msg, Object... args) {
         System.err.printf(msg, args);
         System.exit(-1);
     }
