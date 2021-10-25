@@ -1,2 +1,0 @@
-"Drop: Result should return 70" print
-34 35 + dup 1 + dup drop dup print
