@@ -20,6 +20,7 @@ public class WordParser {
     public static final String TIMES = "*";
     public static final String MOD = "mod";
 
+    public static final String EXIT = "exit";
     public static final String PRINT = "print";
     public static final String DUP = "dup";
     public static final String DROP = "drop";
@@ -42,6 +43,7 @@ public class WordParser {
         WORD_PARSERS.put(TIMES, ArithmeticWords.TIMES);
         WORD_PARSERS.put(MOD, ArithmeticWords.MOD);
 
+        WORD_PARSERS.put(EXIT, StackWords.EXIT);
         WORD_PARSERS.put(PRINT, StackWords.PRINT);
         WORD_PARSERS.put(DUP, StackWords.DUP);
         WORD_PARSERS.put(DROP, StackWords.DROP);
