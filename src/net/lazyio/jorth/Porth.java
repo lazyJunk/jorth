@@ -1,67 +1,17 @@
 package net.lazyio.jorth;
 
+import net.lazyio.jorth.util.IntPair;
+import net.lazyio.jorth.words.WordParser;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import static net.lazyio.jorth.StringUtils.*;
 
 public class Porth {
-
-    public enum Keyword {
-        IF("if"),
-        ORELSE("orelse"),
-        ELSE("else"),
-        END("end"),
-        WHILE("while"),
-        DO("do"),
-        MACRO("macro"),
-        INCLUDE("include"),
-        MEMORY("memory"),
-        PROC("proc");
-
-        public String name;
-
-        Keyword(String name) {
-            this.name = name;
-        }
-    }
-
-    public enum Intrinsics {
-        PRINT("print"),
-        PLUS("+"),
-        MINUS("-"),
-        DIV("/"),
-        MUL("*"),
-        MOD("mod"),
-        EQUAL("="),
-        NOT_EQUAL("!="),
-        LESS("<"),
-        GREATER(">"),
-        LESS_EQUAL("<="),
-        GREATER_EQUAL(">="),
-        DUP("dup"),
-        DROP("drop"),
-        ;
-
-        public String name;
-
-        Intrinsics(String name) {
-            this.name = name;
-        }
-
-        public static boolean contains(String str) {
-            return Arrays.stream(Intrinsics.values()).anyMatch(intrinsics -> intrinsics.name.equals(str));
-        }
-
-        public static Intrinsics from(String str) {
-            return Arrays.stream(Intrinsics.values()).filter(i -> i.name.equals(str)).findFirst().get();
-        }
-
-    }
 
     public enum DataType {WORD, STR, INT, CHAR, BOOL;}
 
@@ -90,10 +40,10 @@ public class Porth {
                 if (verbose) log("  => Put INT on stack with index %d and content %s\n", stackIndex, token.text);
                 stack.put(stackIndex, token.text);
                 stackIndex++;
-            } else if (Utils.parsers.containsKey(token.text)) {
-                var result = Utils.parsers.get(token.text).parse(tokens, index, blocks, stack, stackIndex, verbose);
-                index = result.a();
-                stackIndex = result.b();
+            } else if (WordParser.containsWord(token.text)) {
+                var result = WordParser.forWord(token.text).parse(tokens, index, blocks, stack, stackIndex, verbose);
+                index = result.a;
+                stackIndex = result.b;
             } else {
                 fatal("==> ERROR: Unknown word [%s].", token.text);
             }
@@ -105,8 +55,8 @@ public class Porth {
         log("Took: %sm:%ss:%sms\n", duration.toMinutes(), duration.toSeconds(), duration.toMillis());
     }
 
-    private static List<Utils.IntPair> setupBlocks(List<Token> tokens) {
-        var blocks = new ArrayList<Utils.IntPair>();
+    private static List<IntPair> setupBlocks(List<Token> tokens) {
+        var blocks = new ArrayList<IntPair>();
 
         int lastEnd = -1;
         int lastIf = -1;
@@ -116,7 +66,7 @@ public class Porth {
                 if (lastEnd == -1) lastIf = i;
             } else if (tokens.get(i).text.equals("end")) {
                 if (lastIf != -1) {
-                    blocks.add(new Utils.IntPair(lastIf, i));
+                    blocks.add(new IntPair(lastIf, i));
                     lastIf = -1;
                     lastEnd = -1;
                 } else fatal("==> ERROR: [end] can only be used to close blocks.\n");
