@@ -1,0 +1,2 @@
+"> If else test: " print
+10 11 < if "10 is less than 11" print else "10 is greater than 11" print end
