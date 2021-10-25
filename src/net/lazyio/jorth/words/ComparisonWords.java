@@ -5,7 +5,7 @@ import net.lazyio.jorth.util.IntPair;
 import java.util.Map;
 
 import static net.lazyio.jorth.Porth.log;
-import static net.lazyio.jorth.StringUtils._int;
+import static net.lazyio.jorth.util.StringUtils._int;
 
 public class ComparisonWords {
 

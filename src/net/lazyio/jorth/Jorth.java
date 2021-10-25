@@ -24,7 +24,7 @@ public class Jorth {
         if (args[0].equals("--alltests")) {
             Files.list(Paths.get("test/")).forEach(path -> {
                 try {
-                    System.out.printf(testDivColor + "==> Running test: %s <==%s\n", path.getFileName(), resetColor);
+                    System.out.printf(testDivColor + "===> Running test: %s <===%s\n", path.getFileName(), resetColor);
                     List<String> porthLines = Files.readAllLines(path);
                     Porth.sim(porthLines, verbose, true);
                 } catch (IOException e) {
@@ -34,7 +34,7 @@ public class Jorth {
         } else {
             try {
                 var filePath = Paths.get(args[0]);
-                System.out.printf(testDivColor + "==> Running test: %s <==%s\n", filePath.getFileName(), resetColor);
+                System.out.printf(testDivColor + "===> Running test: %s <===%s\n", filePath.getFileName(), resetColor);
                 List<String> porthLines = Files.readAllLines(filePath);
                 Porth.sim(porthLines, verbose, true);
             } catch (IOException e) {
@@ -43,6 +43,6 @@ public class Jorth {
         }
         var end = Instant.now();
         var duration = Duration.between(start, end);
-        System.out.printf(finishColor + "Overall time: %sm:%ss:%sms\n", duration.toMinutes(), duration.toSeconds(), duration.toMillis());
+        System.out.printf(finishColor + "===> Overall time: %sm:%ss:%sms <===\n", duration.toMinutes(), duration.toSeconds(), duration.toMillis());
     }
 }

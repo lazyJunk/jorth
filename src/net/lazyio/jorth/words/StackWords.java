@@ -3,8 +3,8 @@ package net.lazyio.jorth.words;
 import net.lazyio.jorth.util.IntPair;
 
 import static net.lazyio.jorth.Porth.log;
-import static net.lazyio.jorth.StringUtils.isStr;
-import static net.lazyio.jorth.StringUtils.removeQuotes;
+import static net.lazyio.jorth.util.StringUtils.isStr;
+import static net.lazyio.jorth.util.StringUtils.removeQuotes;
 
 public class StackWords {
 

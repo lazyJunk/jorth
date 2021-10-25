@@ -1,4 +1,4 @@
-package net.lazyio.jorth;
+package net.lazyio.jorth.util;
 
 import java.util.ArrayList;
 import java.util.List;
