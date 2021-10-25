@@ -23,6 +23,10 @@ public class StringUtils {
         return words;
     }
 
+    public static boolean isBool(String str) {
+        return isStr(str) && (removeQuotes(str).equals("true") || removeQuotes(str).equals("false"));
+    }
+
     public static boolean isStr(String str) {
         return str.startsWith("\"") && str.endsWith("\"");
     }
@@ -31,11 +35,11 @@ public class StringUtils {
         return str.length() == 3 && (str.startsWith("'") && str.endsWith("'"));
     }
 
-    public static String removeQuotes(String str){
+    public static String removeQuotes(String str) {
         return str.substring(1, str.length() - 1);
     }
 
-    public static int _int(String str){
+    public static int _int(String str) {
         return Integer.parseInt(str);
     }
 }
